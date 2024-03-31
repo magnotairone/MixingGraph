@@ -73,7 +73,7 @@ res_bcw$logLG_hat # penalized log pseudo-likelihood
 
 **Plotting the result:**
 
-```{r plot, cache=TRUE, warning=FALSE, message=FALSE, fig.height=2}
+```{r plot, cache=TRUE, warning=FALSE, message=FALSE, fig.height=3}
 coords <- generate_circular_node_positions(5, 5) # package helper function to generate coordinate for the vertices
 
 g_exact <- plot_graph_from_matrix(res_exact$G_hat[[1]], coords, title = "Exact")
