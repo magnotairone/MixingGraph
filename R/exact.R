@@ -61,7 +61,7 @@ exact <- function(sample_df, card_A, d, lambda){
 #' card_A <- 2
 #' d <- 3
 #' lambda <- 0.5
-#' exact_parallel(sample_data, card_A, d, lambda)
+# exact_parallel(sample_data, card_A, d, lambda)
 #'
 exact_parallel <- function(sample_df, card_A, d, lambda){
   future::plan(future::multisession, workers = 3)

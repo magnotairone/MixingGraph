@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
+helper.R
+logo.R
