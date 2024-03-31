@@ -95,12 +95,12 @@ res_bcw$logLG_hat # penalized log pseudo-likelihood
 ``` r
 coords <- generate_circular_node_positions(5, 5) # package helper function to generate coordinate for the vertices
 
-g_exact <- plot_graph_from_matrix(res_exact$G_hat[[1]], coords)
-g_fwd <- plot_graph_from_matrix(res_fwd$G_hat[[1]], coords)
-g_bcw <- plot_graph_from_matrix(res_bcw$G_hat[[1]], coords)
+g_exact <- plot_graph_from_matrix(res_exact$G_hat[[1]], coords, title = "Exact")
+g_fwd <- plot_graph_from_matrix(res_fwd$G_hat[[1]], coords, title = "Forward")
+g_bcw <- plot_graph_from_matrix(res_bcw$G_hat[[1]], coords, title = "Backward")
 
 library(patchwork)
-g_exact + g_bcw + g_bcw
+g_exact + g_fwd + g_bcw
 ```
 
 <img src="man/figures/README-plot-1.png" width="100%" />
