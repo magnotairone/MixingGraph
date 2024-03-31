@@ -27,6 +27,5 @@ sample_data <- data.frame(V1 = c(0, 1, 0, 1), V2 = c(1, 0, 1, 0), V3 = c(1, 0, 0
 card_A <- 2
 d <- 3
 lambda <- 0.5
-exact_parallel(sample_data, card_A, d, lambda)
 
 }

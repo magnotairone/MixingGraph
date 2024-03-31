@@ -77,7 +77,7 @@ exact_parallel <- function(sample_df, card_A, d, lambda){
                                                                         "magrittr", "MixingGraph"))
   ) %dofuture% {
 
-    G <- get_synmetric_matrix_from_triangle(vec$tri[[i]], d)
+    G <- get_symmetric_matrix_from_triangle(vec$tri[[i]], d)
     logLG <- get_and_sum_terms_with_penalty(sample_data = sample_df,
                                             G = G,
                                             card_A = card_A,

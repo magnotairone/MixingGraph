@@ -1,16 +1,28 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MixingGraph
+# MixingGraph: estimation for for graphical models under mixing conditions
 
 <!-- badges: start -->
 
 <img src="man/figures/logo.png" align="right" height="139" />
 <!-- badges: end -->
 
-The goal of MixingGraph is to …
+The goal of MixingGraph is to implement a novel approach for estimating
+the graph of conditional dependencies in a random vector based on finite
+sample data. We define this approach as a global model selection
+criterion, which means optimizing a function across the entire set of
+potential graphs, removing the need to estimate and combine individual
+neighborhoods as commonly proposed in the literature. To the best of our
+knowledge, these results represent a pioneering demonstration of the
+consistency of a model selection criterion for Markov random fields on
+graphs when dealing with non-independent data.
 
-## Installation
+## :writing_hand: Author
+
+Magno T. F. Severino <https://magnotairone.github.io/>
+
+## :arrow_double_down: Installation
 
 You can install the development version of MixingGraph from
 [GitHub](https://github.com/) with:
@@ -22,41 +34,73 @@ devtools::install_github("magnotairone/MixingGraph")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to run the algorithms using
+an example in the `sample_data` dataframe:
 
 ``` r
 library(MixingGraph)
-#> Carregando pacotes exigidos: doFuture
-#> Warning: package 'doFuture' was built under R version 4.2.3
-#> Carregando pacotes exigidos: foreach
-#> Carregando pacotes exigidos: future
-#> Warning: package 'future' was built under R version 4.2.3
-## basic example code
+data(sample_data)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+**Exact algorithm:**
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+res_exact <- exact(sample_data, card_A = 2, d = ncol(sample_data), lambda = 1 * log(nrow(sample_data)))
+res_exact$G_hat # estimated graph
+#> [[1]]
+#>      [,1] [,2] [,3] [,4] [,5]
+#> [1,]    0    0    0    0    0
+#> [2,]    0    0    1    0    0
+#> [3,]    0    1    0    1    0
+#> [4,]    0    0    1    0    0
+#> [5,]    0    0    0    0    0
+res_exact$logLG_hat # penalized log pseudo-likelihood
+#> [1] -3192.653
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+**Forward stepwise algorithm:**
 
-You can also embed plots, for example:
+``` r
+res_fwd <- greedy_forward(sample_data, lambda = 1 * log(nrow(sample_data)), card_A = 2, d = ncol(sample_data))
+res_fwd$G_hat # estimated graph
+#> [[1]]
+#>      [,1] [,2] [,3] [,4] [,5]
+#> [1,]    0    0    0    0    0
+#> [2,]    0    0    1    0    0
+#> [3,]    0    1    0    1    0
+#> [4,]    0    0    1    0    0
+#> [5,]    0    0    0    0    0
+res_fwd$logLG_hat # penalized log pseudo-likelihood
+#> [1] -3192.653
+```
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+**Backward stepwise algorithm:**
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+res_bcw <- greedy_forward(sample_data, lambda = 1 * log(nrow(sample_data)), card_A = 2, d = ncol(sample_data))
+res_bcw$G_hat # estimated graph
+#> [[1]]
+#>      [,1] [,2] [,3] [,4] [,5]
+#> [1,]    0    0    0    0    0
+#> [2,]    0    0    1    0    0
+#> [3,]    0    1    0    1    0
+#> [4,]    0    0    1    0    0
+#> [5,]    0    0    0    0    0
+res_bcw$logLG_hat # penalized log pseudo-likelihood
+#> [1] -3192.653
+```
+
+**Plotting the result:**
+
+``` r
+coords <- generate_circular_node_positions(5, 5) # package helper function to generate coordinate for the vertices
+
+g_exact <- plot_graph_from_matrix(res_exact$G_hat[[1]], coords)
+g_fwd <- plot_graph_from_matrix(res_fwd$G_hat[[1]], coords)
+g_bcw <- plot_graph_from_matrix(res_bcw$G_hat[[1]], coords)
+
+library(patchwork)
+g_exact + g_bcw + g_bcw
+```
+
+<img src="man/figures/README-plot-1.png" width="100%" />
