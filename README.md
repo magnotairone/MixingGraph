@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# MixingGraph: estimation for for graphical models under mixing conditions
+# MixingGraph: estimation for graphical models under mixing conditions
 
 <!-- badges: start -->
 
